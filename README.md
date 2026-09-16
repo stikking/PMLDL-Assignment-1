@@ -25,7 +25,7 @@ api starts and waits until healthy -> app starts.
     ├── code
     |   ├── datasets/process_data.py
     |   ├── models/train_model.py
-    |   ├── pipeline/Dockerfile        # stages 1-2 image
+    |   ├── pipeline/Dockerfile
     |   └── deployment
     |       ├── api/
     |       ├── app/
