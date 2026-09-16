@@ -1,0 +1,40 @@
+services:
+  pipeline:
+    build:
+      context: ..
+      dockerfile: pipeline/Dockerfile
+    volumes:
+      - ../../data:/app/data
+      - ../../models:/app/models
+      - ../../mlruns:/app/mlruns
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    networks:
+      - pipeline_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ../../models:/app/models:ro
+    depends_on:
+      pipeline:
+        condition: service_completed_successfully
+
+  app:
+    build: ./app
+    ports:
+      - "8501:8501"
+    networks:
+      - pipeline_network
+    depends_on:
+      api:
+        condition: service_healthy
+
+networks:
+  pipeline_network:
+    driver: bridge
