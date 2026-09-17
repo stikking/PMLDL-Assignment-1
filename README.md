@@ -87,6 +87,6 @@ Logs: pipeline.log (timestamped, appended on every run).
 Metrics and the model are logged on every run (mlruns/ is mounted from the
 host, so runs are visible on the host machine):
 
-    mlflow ui --backend-store-uri ./mlruns
+    mlflow server --backend-store-uri ./mlruns --host 0.0.0.0 --port 5000
     # open http://localhost:5000
 '@ | Out-File -FilePath README.md -Encoding utf8
